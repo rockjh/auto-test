@@ -1,0 +1,33 @@
+{
+  "groups": [
+    {
+      "name": "autotest.executor",
+      "type": "com.example.autotest.infra.config.ThreadPoolProperties",
+      "sourceType": "com.example.autotest.infra.config.ThreadPoolProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "autotest.executor.core-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.example.autotest.infra.config.ThreadPoolProperties",
+      "defaultValue": 4
+    },
+    {
+      "name": "autotest.executor.max-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.example.autotest.infra.config.ThreadPoolProperties",
+      "defaultValue": 8
+    },
+    {
+      "name": "autotest.executor.queue-capacity",
+      "type": "java.lang.Integer",
+      "sourceType": "com.example.autotest.infra.config.ThreadPoolProperties",
+      "defaultValue": 100
+    }
+  ],
+  "hints": [],
+  "ignored": {
+    "properties": []
+  }
+}

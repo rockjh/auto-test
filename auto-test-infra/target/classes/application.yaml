@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:autotest;MODE=MYSQL;DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+    username: sa
+    password: ''
+    driver-class-name: org.h2.Driver
+  redis:
+    host: localhost
+    port: 6379
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+logging:
+  level:
+    com.example.autotest: INFO

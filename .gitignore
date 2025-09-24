@@ -1,0 +1,24 @@
+# Maven & build outputs
+/target/
+**/target/
+*.class
+
+# IDE configuration
+/.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# Logs & temp files
+*.log
+*.tmp
+hs_err_pid*
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Local environment overrides
+.env
+env.local
