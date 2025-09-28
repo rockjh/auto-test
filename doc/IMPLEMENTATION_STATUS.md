@@ -1,29 +1,31 @@
-# 当前功能实现状态
+# 文档功能覆盖检查报告
 
-本报告基于 `doc/PRD.md` 与 `doc/DETAILED_DESIGN.md` 的需求，对比仓库内源码的实现情况。
+## 核心结论
+- 代码已经打通 PRD 规划的主链路（Swagger 同步 → 模板生成 → 场景编排 → 执行日志 → 差异快照），但详细设计中关于随机策略审计、执行调度配额、通知审计等增强能力尚未落地，需按阶段补齐。
 
-## 已落地模块/能力
-- **Swagger 项目管理**：提供项目创建、列表、详情、同步及差异查询；同步流程会解析本地 Swagger 文档、更新 `autotest_project` / `autotest_collection` / `autotest_group`，并触发 `SwaggerSyncEvent`（`auto-test-module-swagger/swagger-biz/src/main/java/com/example/autotest/swagger/service/SwaggerProjectServiceImpl.java`, `auto-test-module-swagger/swagger-biz/src/main/java/com/example/autotest/swagger/controller/SwaggerProjectController.java`）。
-- **模板生成与查询**：监听同步事件，为新增/更新接口生成 `minimal` 模板，并提供模板列表、重生成、预览接口，同时在模板变更时发布 `TemplateUpdateEvent`（`auto-test-module-template/template-biz/src/main/java/com/example/autotest/template/listener/SwaggerSyncEventListener.java`, `auto-test-module-template/template-biz/src/main/java/com/example/autotest/template/service/TemplateGenerationService.java`, `auto-test-module-template/template-biz/src/main/java/com/example/autotest/template/service/TemplateServiceImpl.java`）。
-- **场景管理基础**：支持场景创建/更新/发布、按项目查询及步骤保存；模板发生变更时可标记相关场景需复核（`auto-test-module-scenario/scenario-biz/src/main/java/com/example/autotest/scenario/service/ScenarioServiceImpl.java`, `auto-test-module-scenario/scenario-biz/src/main/java/com/example/autotest/scenario/listener/TemplateUpdateScenarioListener.java`）。
-- **执行器雏形**：实现串行执行流程，基于模板预览生成请求快照、写入执行/步骤记录，并在结束时发布 `ScenarioExecutionEvent`（`auto-test-module-executor/executor-biz/src/main/java/com/example/autotest/executor/service/ExecutionServiceImpl.java`, `auto-test-module-executor/executor-biz/src/main/java/com/example/autotest/executor/controller/ExecutionController.java`）。
-- **差异快照与复核接口**：监听同步与模板事件生成差异快照，提供待复核列表与复核操作（`auto-test-module-diff/diff-biz/src/main/java/com/example/autotest/diff/listener/SwaggerSyncDiffListener.java`, `auto-test-module-diff/diff-biz/src/main/java/com/example/autotest/diff/listener/TemplateUpdateDiffListener.java`, `auto-test-module-diff/diff-biz/src/main/java/com/example/autotest/diff/service/DiffServiceImpl.java`）。
-- **基础设施**：完成数据源、MyBatis-Plus、线程池、Redis、统一异常处理、通用响应、`BizIdGenerator` 等通用能力（`auto-test-infra/src/main/java/com/example/autotest/infra/config/DataSourceConfig.java`, `auto-test-infra/src/main/java/com/example/autotest/infra/config/ThreadPoolConfig.java`, `auto-test-infra/src/main/java/com/example/autotest/infra/core/web/GlobalExceptionHandler.java`）。
+## 已实现的关键能力
+- **Swagger 同步闭环**：满足 doc/DETAILED_DESIGN.md:70 关于同步、差异记录与事件发布的要求；手动触发同步、落库 diff 与发布事件的实现位于 auto-test-module-swagger/swagger-biz/src/main/java/com/example/autotest/swagger/service/SwaggerProjectServiceImpl.java:130 以及对应的 REST 接口 auto-test-module-swagger/swagger-biz/src/main/java/com/example/autotest/swagger/controller/SwaggerProjectController.java:24。
+- **项目环境管理**：文档提出的项目级 Host/Header 维护（doc/PRD.md:41）已通过 ProjectEnvironmentController 与 Service 落地，核心代码见 auto-test-module-swagger/swagger-biz/src/main/java/com/example/autotest/swagger/controller/ProjectEnvironmentController.java:24 与 auto-test-module-swagger/swagger-biz/src/main/java/com/example/autotest/swagger/service/ProjectEnvironmentServiceImpl.java:50。
+- **模板最小/全量生成与事件联动**：PRD 对 minimal/full 模板的诉求（doc/PRD.md:31）在 TemplateGenerationService 中实现，具体逻辑位于 auto-test-module-template/template-biz/src/main/java/com/example/autotest/template/service/TemplateGenerationService.java:695 与 auto-test-module-template/template-biz/src/main/java/com/example/autotest/template/service/TemplateGenerationService.java:720，并通过 SwaggerSyncEventListener 监听同步事件（auto-test-module-template/template-biz/src/main/java/com/example/autotest/template/listener/SwaggerSyncEventListener.java:22）。
+- **模板预览与复核联动**：TemplateServiceImpl 已提供参数规则渲染与预览能力，满足 doc/DETAILED_DESIGN.md:103 的预览需求，对应实现见 auto-test-module-template/template-biz/src/main/java/com/example/autotest/template/service/TemplateServiceImpl.java:87，且模板更新会广播 TemplateUpdateEvent 供场景与差异模块消费（auto-test-module-template/template-biz/src/main/java/com/example/autotest/template/service/TemplateGenerationService.java:186）。
+- **场景建模、变量校验与版本存档**：场景模块履行 doc/PRD.md:95 的编排与版本化要求，创建/更新/发布逻辑及 need_review 判定位于 auto-test-module-scenario/scenario-biz/src/main/java/com/example/autotest/scenario/service/ScenarioServiceImpl.java:72、auto-test-module-scenario/scenario-biz/src/main/java/com/example/autotest/scenario/service/ScenarioServiceImpl.java:221 与场景 REST 接口 auto-test-module-scenario/scenario-biz/src/main/java/com/example/autotest/scenario/controller/ScenarioController.java:24。
+- **执行器串行执行、变量传递与日志分表**：doc/DETAILED_DESIGN.md:184 所述的串行执行与 JSONPath 提取通过 ExecutionServiceImpl、StepRunner 与 VariableContext 落地，核心代码见 auto-test-module-executor/executor-biz/src/main/java/com/example/autotest/executor/service/ExecutionServiceImpl.java:80、auto-test-module-executor/executor-biz/src/main/java/com/example/autotest/executor/runner/StepRunner.java:54，以及分表日志实现 auto-test-module-executor/executor-biz/src/main/java/com/example/autotest/executor/service/impl/ExecutionLogServiceImpl.java:76。
+- **差异捕获与复核接口**：满足 doc/DETAILED_DESIGN.md:249 关于差异快照与复核的需求，监听器与复核服务分别位于 auto-test-module-diff/diff-biz/src/main/java/com/example/autotest/diff/listener/SwaggerSyncDiffListener.java:23、auto-test-module-diff/diff-biz/src/main/java/com/example/autotest/diff/listener/TemplateUpdateDiffListener.java:45 与 auto-test-module-diff/diff-biz/src/main/java/com/example/autotest/diff/service/DiffServiceImpl.java:25；REST 接口见 auto-test-module-diff/diff-biz/src/main/java/com/example/autotest/diff/controller/DiffController.java:24。
+- **基础设施封装**：与 doc/ARCHITECTURE.md:87 对执行线程池的描述一致，ThreadPoolConfig 和 RestTemplateConfig 等基础设施位于 auto-test-infra/src/main/java/com/example/autotest/infra/config/ThreadPoolConfig.java:20 与 auto-test-infra/src/main/java/com/example/autotest/infra/config/RestTemplateConfig.java:19。
 
-## 主要缺口
-- **Swagger 环境与远程同步**：需求要求维护项目环境（Host/Header/变量）并支持 URL 同步（`doc/PRD.md` 第 5 节），当前只有 DO 定义，缺少 Service/Controller；同步实现仅允许读取本地文件，并显式禁用网络抓取。
-- **模板策略与审计体系**：PRD 要求最小/全量/自定义模板、随机策略库、手工校正与审计（`doc/PRD.md` 第 2 节、`doc/DETAILED_DESIGN.md` 第 3 节）。现阶段仅生成路径参数样例，无 `RuleRegistry`、`RuleAudit`、自定义变体、need_review 生命周期等能力。
-- **场景变量与高级编排**：文档强调变量池、JSONPath 映射、重试/条件配置（`doc/PRD.md` 第 5 节、`doc/DETAILED_DESIGN.md` 第 4 节），但当前实现尚未落地变量表读写、JSONPath 校验、重试策略或 default 环境校验，也未与 need_review 流程联动。
-- **执行器实际能力**：需求包含真实 HTTP 调用、随机参数/变量替换、重试、互斥、日志分表、告警与取消等（`doc/PRD.md` 第 6 节、`doc/DETAILED_DESIGN.md` 第 5 节）。目前执行逻辑仅构造模拟响应，缺少线程池调度、并发配额、请求发送、日志与通知。
-- **差异闭环与通知**：虽然生成了差异快照，但未集成复核任务、need_review 回写与告警推送，UI/权限/审计链路也尚未建设。
-- **RuoYi 权限与配置复用**：详细设计要求复用 RuoYi 登录、权限、配置、审计（`doc/DETAILED_DESIGN.md` 第 1 节），现在项目仍是裸 Spring Boot，未接入认证、菜单、操作日志、配置中心。
+## 部分实现但存在差距的功能
+- **Swagger 差异明细**：文档要求统计 `diff_summary.invalidNodes`（doc/DETAILED_DESIGN.md:82），当前同步逻辑仅输出 added/updated/removed，未记录异常字段，影响非规范字段追踪。
+- **随机策略库与审计链路**：doc/DETAILED_DESIGN.md:93-116 规划了 `RuleRegistry`、`RuleOverrideService` 与 `autotest_rule_audit`，现有实现仅生成样例值（TemplateGenerationService）且无审计记录或自定义策略留痕。
+- **场景事件与跨模块联动**：架构设计要求发布 `ScenarioUpdatedEvent`（doc/ARCHITECTURE.md:53），目前 publish 流程仅写入版本表（auto-test-module-scenario/scenario-biz/src/main/java/com/example/autotest/scenario/service/ScenarioServiceImpl.java:124），未向差异或通知模块广播，导致复核链路需要手动刷新。
+- **执行调度与配额控制**：doc/DETAILED_DESIGN.md:192-243 规划 `ExecutionDispatcher`、项目/租户配额及取消接口。现阶段 trigger 方法直接在事务中同步执行（auto-test-module-executor/executor-biz/src/main/java/com/example/autotest/executor/service/ExecutionServiceImpl.java:80），未校验配额，也缺少 `/api/execution/{id}/cancel`。
+- **差异通知闭环**：详细设计中的 `DiffNotificationService` 与 need_review 回写（doc/DETAILED_DESIGN.md:257）尚未实现，DiffServiceImpl 只更新差异自身状态，无法自动清理模板/场景的复核标记或推送提醒。
+- **配置中心与参数化**：文档期望通过 SysConfig 动态调整线程池与配额（doc/ARCHITECTURE.md:86），当前仅有本地 `autotest.executor.*` 配置（ThreadPoolProperties），缺少 SysConfig 绑定与运行时调整能力。
 
-## 建议的后续迭代顺序
-1. **完善 Swagger 项目与环境管理**：实现环境 CRUD、同步操作人、允许受控的 URL 拉取，并完善差异信息结构。
-2. **扩展模板模块**：补齐随机策略库、模板审计、need_review 生命周期、多模板类型及 Header/Body 变量处理。
-3. **强化场景编排**：落地变量模型与 JSONPath 校验、重试与条件配置、need_review 联动，发布时写入版本/变量信息。
-4. **落地执行器核心能力**：实现真实 HTTP 调用、变量传递、重试与超时、执行互斥、日志分表及通知通道，完善线程池/配额配置。
-5. **搭建权限与横切能力**：接入 RuoYi 权限体系、配置中心、操作日志，并补充事件驱动的复核/告警闭环。
-6. **补充测试与监控**：覆盖单元/集成测试、引入性能指标与告警策略，保证核心链路稳定。
+## 尚未覆盖的需求
+- **模板与规则审计表**：`autotest_rule_audit` 在 doc/schema.sql:82 定义，但仓库缺少对应 DO、Mapper 与 Service，手工编辑记录无法追溯。
+- **通知/集成通道**：文档规划的 `NotificationGateway`、Webhook 入口与差异/执行告警（doc/ARCHITECTURE.md:96、doc/DETAILED_DESIGN.md:230）未见实现，相关事件目前只在日志中留痕。
+- **执行取消与配额脚本**：PRD 中的取消接口与运维脚本（doc/DETAILED_DESIGN.md:233、doc/DETAILED_DESIGN.md:275）尚未提供，`scripts/` 目录不存在，对应初始化脚本缺失。
+- **操作审计与权限配置**：需求强调复用 RuoYi 审计/权限能力（doc/PRD.md:123、doc/ARCHITECTURE.md:45），当前业务层尚未接入 `AuditLogService` 或细粒度权限校验，角色隔离需额外规划。
 
-以上内容将随功能推进持续更新。
+## 后续建议
+- 依据上述差距补全随机策略审计、执行调度、通知告警等能力，并同步更新 Flyway 脚本与 `doc/DETAILED_DESIGN.md` 的状态说明，避免需求与实现再次偏离。

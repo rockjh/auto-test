@@ -19,7 +19,7 @@ CREATE TABLE autotest_project (
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='Swagger 项目主表';
 
 ALTER TABLE autotest_project
@@ -34,14 +34,14 @@ CREATE TABLE autotest_project_env (
   host             VARCHAR(255)    NOT NULL,
   headers          JSON            DEFAULT NULL COMMENT '公共 Header，敏感字段加密',
   variables        JSON            DEFAULT NULL COMMENT '环境级变量占位',
-  is_default       BIT(1)          NOT NULL DEFAULT b'0',
+  is_default       BIT(1)          NOT NULL DEFAULT 0,
   status           TINYINT         NOT NULL DEFAULT 1,
   remark           VARCHAR(255)    DEFAULT NULL,
   creator          VARCHAR(64)     NOT NULL,
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='项目环境配置';
 
 ALTER TABLE autotest_project_env
@@ -62,7 +62,7 @@ CREATE TABLE autotest_swagger_sync (
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='Swagger 同步记录';
 
 ALTER TABLE autotest_swagger_sync
@@ -81,7 +81,7 @@ CREATE TABLE autotest_collection (
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='Swagger Tag 维度';
 
 ALTER TABLE autotest_collection
@@ -97,7 +97,7 @@ CREATE TABLE autotest_group (
   summary          VARCHAR(255)    DEFAULT NULL,
   operation_id     VARCHAR(160)    DEFAULT NULL,
   hash             CHAR(64)        NOT NULL,
-  deprecated       BIT(1)          NOT NULL DEFAULT b'0',
+  deprecated       BIT(1)          NOT NULL DEFAULT 0,
   status           TINYINT         NOT NULL DEFAULT 1,
   request_schema   JSON            DEFAULT NULL,
   response_schema  JSON            DEFAULT NULL,
@@ -107,7 +107,7 @@ CREATE TABLE autotest_group (
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='单接口定义';
 
 ALTER TABLE autotest_group
@@ -126,13 +126,13 @@ CREATE TABLE autotest_curl_variant (
   rule_version     VARCHAR(32)     DEFAULT NULL,
   editor_id        BIGINT UNSIGNED DEFAULT NULL,
   editor_name      VARCHAR(120)    DEFAULT NULL,
-  need_review      BIT(1)          NOT NULL DEFAULT b'0',
+  need_review      BIT(1)          NOT NULL DEFAULT 0,
   remark           VARCHAR(255)    DEFAULT NULL,
   creator          VARCHAR(64)     NOT NULL,
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='curl 模板与随机规则';
 
 ALTER TABLE autotest_curl_variant
@@ -151,7 +151,7 @@ CREATE TABLE autotest_rule_audit (
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='模板/规则审计';
 
 ALTER TABLE autotest_rule_audit
@@ -168,14 +168,14 @@ CREATE TABLE autotest_scenario (
   owner_name       VARCHAR(120)    DEFAULT NULL,
   default_env_id   BIGINT UNSIGNED DEFAULT NULL,
   metadata         JSON            DEFAULT NULL COMMENT '调度选项/并发/执行窗口',
-  need_review      BIT(1)          NOT NULL DEFAULT b'0',
+  need_review      BIT(1)          NOT NULL DEFAULT 0,
   last_execution_id BIGINT UNSIGNED DEFAULT NULL,
   remark           VARCHAR(255)    DEFAULT NULL,
   creator          VARCHAR(64)     NOT NULL,
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='测试场景';
 
 ALTER TABLE autotest_scenario
@@ -197,7 +197,7 @@ CREATE TABLE autotest_scenario_step (
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='场景步骤';
 
 ALTER TABLE autotest_scenario_step
@@ -216,7 +216,7 @@ CREATE TABLE autotest_scenario_version (
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='场景版本存档';
 
 ALTER TABLE autotest_scenario_version
@@ -237,7 +237,7 @@ CREATE TABLE autotest_scenario_variable (
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='场景变量池';
 
 ALTER TABLE autotest_scenario_variable
@@ -263,7 +263,7 @@ CREATE TABLE autotest_execution (
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='场景执行实例';
 
 ALTER TABLE autotest_execution
@@ -288,7 +288,7 @@ CREATE TABLE autotest_execution_detail (
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='步骤执行明细';
 
 ALTER TABLE autotest_execution_detail
@@ -310,7 +310,7 @@ CREATE TABLE autotest_execution_log_template (
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='执行日志分表模板 (复制为 autotest_execution_log_{projectId})';
 
 ALTER TABLE autotest_execution_log_template
@@ -325,7 +325,7 @@ CREATE TABLE autotest_diff_snapshot (
   related_id       BIGINT UNSIGNED DEFAULT NULL COMMENT '关联同步或执行记录',
   diff_type        VARCHAR(32)     NOT NULL COMMENT 'add/update/delete/rule-change',
   diff_payload     JSON            NOT NULL,
-  need_review      BIT(1)          NOT NULL DEFAULT b'1',
+  need_review      BIT(1)          NOT NULL DEFAULT 1,
   reviewer_id      BIGINT UNSIGNED DEFAULT NULL,
   reviewer_name    VARCHAR(120)    DEFAULT NULL,
   review_status    TINYINT         NOT NULL DEFAULT 0 COMMENT '0=待处理,1=通过,2=拒绝',
@@ -334,7 +334,7 @@ CREATE TABLE autotest_diff_snapshot (
   create_time      DATETIME        NOT NULL,
   updater          VARCHAR(64)     NOT NULL,
   update_time      DATETIME        NOT NULL,
-  deleted          BIT(1)          NOT NULL DEFAULT b'0'
+  deleted          BIT(1)          NOT NULL DEFAULT 0
 ) COMMENT='差异快照与复核';
 
 ALTER TABLE autotest_diff_snapshot

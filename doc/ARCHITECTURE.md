@@ -116,7 +116,7 @@ autotest:
     cicd-token: ""
 logging:
   level:
-    com.example.autotest: INFO
+    com.skyler.autotest: INFO
 ```
 - 所有参数可通过 `SysConfig` 在线调整，支持热更新。
 

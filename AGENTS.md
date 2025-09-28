@@ -64,4 +64,18 @@
 - 需要运行脚本或初始化数据时，提示用户使用 `scripts/` 下工具并说明用途。
 - 若无法在本地执行测试或构建，请明确说明限制，并给出用户可自行验证的步骤。
 
+## RuoYi 能力速查
+- **框架基础（`yudao-framework`）**：封装 `yudao-common` 与 13 个 Spring Boot Starter，覆盖 Web（全局异常、统一返回、XSS 过滤）、Security（登录态、权限扩展）、MyBatis-Plus、多租户、数据权限、IP 黑白名单、Redis/Redisson、消息队列（Kafka/RabbitMQ/RocketMQ 抽象）、定时任务、监控、Excel 导入导出、WebSocket、灰度防护、测试基类等，可按需引入对应 Starter。
+- **系统管理（`yudao-module-system`）**：提供账号/权限/部门/岗位、租户管理、OAuth2/SSO、数据字典、操作日志、登录与访问日志、动态菜单、短信/邮件/站内信通知、验证码、社交登录、IP 地址库等能力，接口位于 `ruoyi-vue-pro/yudao-module-system/src/main/java/.../controller/admin`。
+- **基础设施（`yudao-module-infra`）**：内置参数配置中心、代码生成器、数据库管理、文件存储（本地/FTP/SFTP/S3/OSS）、定时任务运维、Redis 工具、日志审计、Demo 示例、Spring Boot Admin 监控、WebSocket 运维通道，位于 `ruoyi-vue-pro/yudao-module-infra`。
+- **可选业务域模块**：BPM 工作流（Flowable 流程建模/运行/任务中心）、支付中心（多渠道支付/退款/回调/钱包）、会员中心（用户等级/积分/标签）、CRM（线索/客户/合同/跟进/权限）、ERP（采购/库存/财务/统计）、商城（商品/促销/交易/报表子模块）、微信公众号&小程序（素材、菜单、消息、粉丝）、数据报表（JimuReport、Goview 大屏）、AI 工具（对话、写作、图片、知识库、自动化流程）、IoT 物联网（设备管理、网关、规则引擎）等，位于对应 `yudao-module-*` 目录，可按需拆分引用。
+- **统一依赖（`yudao-dependencies` BOM）**：集中管理 Spring Boot 3.5.5、SpringDoc/Knife4j、Druid、MyBatis/MyBatis-Plus、Dynamic Datasource、Redisson、RocketMQ、Lock4j、SkyWalking、Spring Boot Admin、Flowable 7.0.1、Anji Captcha、MapStruct、Hutool、Guava、TransmittableThreadLocal、Apache Tika、AWS SDK S3、JustAuth、Wechat Java SDK 等版本，确保依赖一致与升级便利。
+- **复用指引**：新增能力前先检索 `ruoyi-vue-pro` 是否已有实现（鉴权/租户 → System，配置/文件/任务 → Infra，业务编排 → 对应模块）；若复用，请在 `auto-test-infra` 聚合所需 Starter 或模块 API，避免业务模块直接跨仓依赖实现细节。
+
 > 阅读上述要点，可快速理解项目背景、模块划分及常见关注点，确保每次对话都聚焦在具体需求与上下文。
+
+生成代码是增加详细的注释和对应的swagger描述
+
+如果我和你沟通过程中显示doc目录下的需求和设计有变动，请提示并询问我是否同步修改doc目录下的文件
+
+不要使用硬编码，错误码也需要统一放在一个枚举中

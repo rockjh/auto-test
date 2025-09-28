@@ -28,6 +28,14 @@
             <artifactId>swagger-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>swagger-biz</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>template-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>

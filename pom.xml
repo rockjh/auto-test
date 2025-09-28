@@ -119,6 +119,11 @@
                 <version>${ruoyi.version}</version>
             </dependency>
             <dependency>
+                <groupId>cn.iocoder.boot</groupId>
+                <artifactId>yudao-module-infra</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>${commons-codec.version}</version>
@@ -179,7 +184,7 @@
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring.boot.version}</version>
                     <configuration>
-                        <mainClass>com.example.autotest.AutoTestApplication</mainClass>
+                        <mainClass>com.skyler.autotest.AutoTestApplication</mainClass>
                     </configuration>
                 </plugin>
             </plugins>

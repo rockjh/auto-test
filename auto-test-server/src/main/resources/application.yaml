@@ -1,11 +1,21 @@
 spring:
   profiles:
     active: dev
+  main:
+    allow-circular-references: true
+  autoconfigure:
+    exclude:
+      - org.redisson.spring.starter.RedissonAutoConfigurationV2
+      - cn.iocoder.yudao.framework.redis.config.YudaoRedisAutoConfiguration
+      - cn.iocoder.yudao.framework.redis.config.YudaoCacheAutoConfiguration
+      - com.binarywang.spring.starter.wxjava.mp.config.WxMpAutoConfiguration
   datasource:
     url: jdbc:h2:mem:autotest;MODE=MYSQL;DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=TRUE
     username: sa
     password: ''
     driver-class-name: org.h2.Driver
+  application:
+    name: auto-test-server
 mybatis-plus:
   mapper-locations:
     - classpath*:mapper/**/*.xml
@@ -13,4 +23,45 @@ server:
   port: 18080
 logging:
   level:
-    com.example.autotest: INFO
+    com.skyler.autotest: INFO
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
+  default-flat-param-object: true
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+yudao:
+  info:
+    base-package: com.skyler.autotest
+  web:
+    admin-ui:
+      url: http://localhost:18080
+  codegen:
+    base-package: ${yudao.info.base-package}
+    db-schemas: autotest
+    front-type: 20
+    vo-type: 10
+    delete-batch-enable: true
+    unit-test-enable: false
+  tenant:
+    enable: false
+  captcha:
+    enable: false
+    width: 120
+    height: 40
+    length: 4
+    expiration: 5m
+    throw-exception: false
+    max-validation-count: 1
+  sms-code:
+    expire-times: 10m
+    send-frequency: 1m
+    send-maximum-quantity-per-day: 10
+    begin-code: 1000
+    end-code: 9999

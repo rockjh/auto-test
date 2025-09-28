@@ -4,6 +4,8 @@ spring:
     username: sa
     password: ''
     driver-class-name: org.h2.Driver
+  main:
+    allow-circular-references: true
   redis:
     host: localhost
     port: 6379
@@ -18,4 +20,4 @@ mybatis-plus:
       logic-not-delete-value: 0
 logging:
   level:
-    com.example.autotest: INFO
+    com.skyler.autotest: INFO
