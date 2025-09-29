@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>auto-test-parent</artifactId>
+    <artifactId>auto-test-backed</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>auto-test-parent</name>
+    <name>auto-test-backed</name>
     <description>Auto generator API test platform</description>
 
     <properties>

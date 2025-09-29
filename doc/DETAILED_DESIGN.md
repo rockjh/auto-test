@@ -2,11 +2,11 @@
 
 ## 1. 基础设施初始化（阶段 0）
 ### 1.1 目标
-- 搭建基于 `auto-test-parent` 的 Maven 多模块工程骨架，与 `ruoyi-vue-pro` 基础设施兼容。
+- 搭建基于 `auto-test-backed` 的 Maven 多模块工程骨架，与 `ruoyi-vue-pro` 基础设施兼容。
 - 提供统一的配置、持久化、审计与权限能力，支撑后续模块开发与运行。
 
 ### 1.2 模块结构
-- `auto-test-parent`: 统一依赖版本、打包管理。
+- `auto-test-backed`: 统一依赖版本、打包管理。
 - `auto-test-infra`:
   - 继承 RuoYi 的 `yudao-framework` 配置。
   - 封装 `MyBatis-Plus`, `RedisTemplate`, `RestTemplate`, `ThreadPoolTaskExecutor` 等基础 Bean。

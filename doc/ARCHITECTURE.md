@@ -8,7 +8,7 @@
 
 ## 2. Maven 模块划分
 ```
-auto-test-parent (pom)
+auto-test-backed (pom)
 ├── auto-test-server           # Spring Boot 启动模块
 ├── auto-test-infra            # 框架封装 & 公共能力
 ├── auto-test-module-swagger   # Swagger 源管理
@@ -157,4 +157,3 @@ logging:
 3. 搭建 Maven 模块骨架与基础配置，初始化 Flyway/Liquibase 脚本。
 4. 准备测试用 Swagger 样例与场景样例，为开发与评审提供数据支撑。
 5. 迭代实现核心流程，边开发边完善测试与监控策略。
-
